@@ -32,34 +32,40 @@ El objetivo no es desarrollar combinatoria avanzada, sino reforzar el razonamien
 
 La práctica se organiza en tres grandes bloques:
 
-### 1. Diagramas de Venn y operaciones con eventos
+1. Diagramas de Venn y operaciones con eventos.
+2. Probabilidad de eventos y probabilidad condicional.
+3. Combinaciones y permutaciones.
+
+---
+
+## 1. Diagramas de Venn y operaciones con eventos
 
 Los estudiantes trabajan con representaciones de dos y tres conjuntos.
 
 Se practican conceptos como:
 
-\[
+$$
 A\cap B
-\]
+$$
 
-\[
+$$
 A\cup B
-\]
+$$
 
-\[
+$$
 A^c
-\]
+$$
 
-\[
+$$
 A-B
-\]
+$$
 
 así como expresiones equivalentes a:
 
-- sólo A;
-- sólo B;
-- A y B;
-- A o B;
+- sólo $A$;
+- sólo $B$;
+- $A$ y $B$;
+- $A$ o $B$;
 - ninguno;
 - exactamente dos eventos;
 - al menos uno;
@@ -67,13 +73,13 @@ así como expresiones equivalentes a:
 
 En los diagramas de tres conjuntos también se distinguen las regiones:
 
-- sólo A;
-- sólo B;
-- sólo C;
-- A y B solamente;
-- A y C solamente;
-- B y C solamente;
-- A, B y C;
+- sólo $A$;
+- sólo $B$;
+- sólo $C$;
+- $A\cap B$, pero no $C$;
+- $A\cap C$, pero no $B$;
+- $B\cap C$, pero no $A$;
+- $A\cap B\cap C$;
 - ninguno de los tres.
 
 ## Diagramas para completar
@@ -82,55 +88,69 @@ Algunos reactivos presentan información global sobre varios eventos y solicitan
 
 Por ejemplo, si se conoce:
 
-\[
+$$
 |A\cap B|=25
-\]
+$$
 
-y
+y además:
 
-\[
-|A\cap B\cap C|=10,
-\]
+$$
+|A\cap B\cap C|=10
+$$
 
 entonces la región correspondiente a **A y B solamente** contiene:
 
-\[
-25-10=15.
-\]
+$$
+25-10=15
+$$
 
 Este tipo de ejercicio busca evitar que el estudiante confunda una intersección completa con una región exclusiva del diagrama.
 
 Cuando un reactivo contiene varias casillas, el sistema puede otorgar **crédito parcial por las regiones correctamente determinadas**.
 
-## Probabilidad a partir de diagramas
+---
+
+## 2. Probabilidad a partir de diagramas
 
 Los diagramas también se utilizan para calcular probabilidades.
 
-Si una encuesta contiene \(N\) personas y una región determinada contiene \(x\) observaciones:
+Si una encuesta contiene $N$ personas y una región determinada contiene $x$ observaciones, entonces:
 
-\[
-P(A)=\frac{x}{N}.
-\]
+$$
+P(A)=\frac{x}{N}
+$$
 
 Los reactivos permiten practicar probabilidades como:
 
-\[
+$$
 P(A)
-\]
+$$
 
-\[
+$$
 P(A\cap B)
-\]
+$$
 
-\[
+$$
 P(A\cup B)
-\]
+$$
 
-\[
+$$
 P(A^c)
-\]
+$$
 
-y otras regiones observables directamente en los diagramas.
+así como probabilidades asociadas a regiones específicas de diagramas de dos y tres conjuntos.
+
+### Unión de dos eventos
+
+Para dos eventos cualesquiera:
+
+$$
+P(A\cup B)=P(A)+P(B)-P(A\cap B)
+$$
+
+La intersección se resta porque, al sumar $P(A)$ y $P(B)$, los elementos pertenecientes a ambos eventos se cuentan dos veces.
+
+---
 
 ## Probabilidad condicional
 
@@ -138,79 +158,126 @@ La práctica incluye problemas de probabilidad condicional basados principalment
 
 Se utiliza la relación:
 
-\[
-P(A\mid B)=\frac{P(A\cap B)}{P(B)}.
-\]
+$$
+P(A\mid B)=\frac{P(A\cap B)}{P(B)}
+$$
 
-Una idea importante es que, al condicionar por \(B\), el nuevo espacio de referencia está formado únicamente por los elementos de \(B\).
+Una idea importante es que, al condicionar por $B$, el nuevo espacio de referencia está formado únicamente por los elementos de $B$.
 
-Por ejemplo, si 40 clientes utilizan una aplicación y 18 de ellos también utilizan un programa de lealtad:
+Por ejemplo, si 40 clientes utilizan una aplicación móvil y 18 de ellos también participan en el programa de lealtad:
 
-\[
+$$
 P(\text{Lealtad}\mid\text{Aplicación})
 =
 \frac{18}{40}
 =
-0.45.
-\]
+0.45
+$$
+
+Por tanto, entre los clientes que utilizan la aplicación, el 45% pertenece también al programa de lealtad.
+
+---
 
 ## Eventos mutuamente excluyentes
 
 También se incluyen ejercicios donde dos eventos no pueden ocurrir simultáneamente.
 
-Si A y B son mutuamente excluyentes:
+Si $A$ y $B$ son mutuamente excluyentes:
 
-\[
+$$
 P(A\cap B)=0
-\]
+$$
 
 y, por tanto:
 
-\[
-P(A\cup B)=P(A)+P(B).
-\]
+$$
+P(A\cup B)=P(A)+P(B)
+$$
 
 Los diagramas correspondientes muestran conjuntos sin intersección para reforzar visualmente esta propiedad.
 
-## Combinaciones y permutaciones
+---
+
+## 3. Combinaciones y permutaciones
 
 Los problemas de combinatoria están planteados principalmente mediante situaciones contextualizadas.
+
+La idea central que debe identificar el estudiante es:
+
+> **¿El orden de los elementos seleccionados modifica el resultado?**
 
 ### Permutaciones
 
 Se utilizan cuando **el orden importa**.
 
-\[
+$$
 P(n,r)=\frac{n!}{(n-r)!}
-\]
+$$
 
-Ejemplo:
+donde:
+
+- $n$ es el número total de elementos disponibles;
+- $r$ es el número de elementos que se seleccionan y ordenan.
+
+Por ejemplo:
 
 > Una empresa reconocerá a los tres mejores vendedores entre ocho participantes, asignando primer, segundo y tercer lugar.
 
-Como los puestos son diferentes, importa quién ocupa cada posición:
+Los puestos son diferentes, por lo que el orden importa.
 
-\[
-P(8,3)=336.
-\]
+$$
+P(8,3)=\frac{8!}{(8-3)!}
+$$
+
+$$
+P(8,3)=\frac{8!}{5!}
+$$
+
+$$
+P(8,3)=8(7)(6)=336
+$$
+
+Por tanto, existen:
+
+$$
+\boxed{336}
+$$
+
+formas distintas de asignar los tres lugares.
+
+---
 
 ### Combinaciones
 
 Se utilizan cuando **el orden no importa**.
 
-\[
+$$
 C(n,r)=\frac{n!}{r!(n-r)!}
-\]
+$$
 
-Ejemplo:
+Por ejemplo:
 
 > De ocho empleados se seleccionarán tres para integrar un comité.
 
-Los mismos tres empleados forman el mismo comité independientemente del orden en que se seleccionen:
+Los mismos tres empleados forman el mismo comité independientemente del orden en que sean seleccionados.
 
-\[
-C(8,3)=56.
-\]
+$$
+C(8,3)=\frac{8!}{3!5!}
+$$
+
+$$
+C(8,3)=56
+$$
+
+Por tanto, pueden formarse:
+
+$$
+\boxed{56}
+$$
+
+comités diferentes.
+
+---
 
 ## Evaluación de combinaciones y permutaciones
 
@@ -224,28 +291,62 @@ o
 
 En los problemas contextualizados se solicita directamente el **número de formas posibles**.
 
-El estudiante debe decidir por su cuenta si la situación corresponde a una combinación o una permutación y realizar el cálculo.
+Por ejemplo:
 
-La retroalimentación posterior sí explica:
+> De 10 candidatos se seleccionarán 4 para integrar un comité.  
+> ¿Cuántos comités diferentes pueden formarse?
+
+El estudiante debe determinar que el orden no importa y calcular:
+
+$$
+C(10,4)=210
+$$
+
+La respuesta que debe introducir es:
+
+`210`
+
+La retroalimentación posterior explica:
 
 - si el orden importa;
-- si se utiliza combinación o permutación;
+- si corresponde combinación o permutación;
 - la notación correspondiente;
-- el cálculo realizado.
+- el procedimiento;
+- el resultado.
 
-De esta manera se evita penalizar diferencias de escritura y se evalúa principalmente el razonamiento y el resultado.
+De esta manera se evita penalizar al estudiante por escribir la notación de una forma distinta a la esperada por el programa.
+
+---
+
+## Factorial
+
+La notación factorial se utiliza en las fórmulas de combinaciones y permutaciones.
+
+Por ejemplo:
+
+$$
+5!=5(4)(3)(2)(1)=120
+$$
+
+Por definición:
+
+$$
+0!=1
+$$
+
+---
 
 ## Respuestas numéricas flexibles
 
 En los reactivos de probabilidad, el sistema permite distintas formas equivalentes de expresar una respuesta.
 
-Por ejemplo, una probabilidad de:
+Por ejemplo, si la respuesta correcta es:
 
-\[
-0.25
-\]
+$$
+P(A)=0.25
+$$
 
-puede introducirse como:
+el estudiante puede introducir formas equivalentes como:
 
 - `0.25`
 - `.25`
@@ -253,6 +354,10 @@ puede introducirse como:
 - `1/4`
 
 cuando el tipo de reactivo permite dichas representaciones.
+
+En los ejercicios de combinaciones y permutaciones se compara directamente el **resultado numérico final**.
+
+---
 
 ## Contextos utilizados
 
@@ -278,6 +383,8 @@ Los ejercicios están orientados principalmente a situaciones relacionadas con *
 
 El propósito es que los ejercicios se perciban como pequeñas situaciones que podrían presentarse en el ámbito empresarial y no únicamente como cálculos abstractos.
 
+---
+
 ## Estructura de cada intento
 
 Cada intento contiene **10 reactivos** seleccionados aleatoriamente del banco.
@@ -296,17 +403,23 @@ La selección se controla para mantener variedad entre:
 
 El objetivo es evitar que un intento quede concentrado únicamente en un tipo de ejercicio.
 
+---
+
 ## Modo estudio
 
 Al activar **Modo estudio**, el estudiante recibe retroalimentación después de responder.
 
-La explicación indica brevemente:
+La explicación puede indicar:
 
 - el procedimiento correcto;
 - qué región del diagrama debe utilizarse;
-- por qué corresponde una combinación o permutación;
+- por qué corresponde una combinación o una permutación;
 - cómo se obtiene la probabilidad;
 - qué error conceptual pudo haberse cometido.
+
+Este modo permite utilizar la aplicación como herramienta de práctica y autoestudio.
+
+---
 
 ## Modo de evaluación
 
@@ -324,6 +437,8 @@ La aplicación muestra entonces:
 - respuestas correctas e incorrectas;
 - explicaciones.
 
+---
+
 ## Reporte
 
 Después de calificar un intento puede generarse un reporte que incluye:
@@ -338,7 +453,9 @@ Después de calificar un intento puede generarse un reporte que incluye:
 - explicaciones;
 - diagramas utilizados.
 
-El reporte puede guardarse como PDF mediante la función de impresión del navegador.
+El reporte puede guardarse como PDF utilizando la función de impresión del navegador.
+
+---
 
 ## Tecnologías utilizadas
 
@@ -353,6 +470,8 @@ No requiere frameworks ni bibliotecas externas.
 
 Todo el proyecto se encuentra contenido en **un único archivo HTML**.
 
+---
+
 ## Ejecución
 
 No requiere instalación.
@@ -366,6 +485,8 @@ No requiere instalación.
 7. Opcionalmente generar el reporte en PDF.
 8. Generar un nuevo intento para obtener una combinación diferente de reactivos.
 
+---
+
 ## Uso educativo
 
 Esta herramienta está diseñada como apoyo para cursos introductorios de **Probabilidad y Estadística** en Gestión Empresarial.
@@ -377,6 +498,8 @@ En particular, busca reforzar tres preguntas fundamentales:
 1. **¿Qué representa cada región o evento?**
 2. **¿Qué información necesito para calcular la probabilidad solicitada?**
 3. **¿Importa o no importa el orden de los elementos seleccionados?**
+
+---
 
 ## Autor
 
