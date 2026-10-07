@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Práctica - Combinatoria, probabilidad y diagramas de Venn v1.1</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#d9e2ef;--primary:#2d5fa8;--soft:#edf4ff;--ok:#157347;--okbg:#eaf8f1;--bad:#b42318;--badbg:#fff0ef;--midbg:#fff8df;--warn:#8a5b00}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+main{max-width:1050px;margin:auto;padding:30px 18px 60px}
+h1{margin:0 0 8px;font-size:clamp(1.65rem,3vw,2.35rem)}
+.sub{color:var(--muted);line-height:1.55}
+.student{margin:20px 0 12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:minmax(180px,1fr) auto;gap:12px;align-items:end}
+.field label{display:block;font-size:.88rem;font-weight:700;margin-bottom:6px}.field input{width:100%;border:1px solid #b8c5d8;border-radius:9px;padding:10px 12px;font-size:16px;color:var(--text);background:#fff}.field input:focus,.answerInput:focus,.vennInput:focus{outline:3px solid #dce9ff;border-color:var(--primary)}
+.bar{margin:12px 0 18px;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted)}.meta b{color:var(--text)}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;font-size:15px;cursor:pointer}.primary{background:var(--primary);color:#fff}.secondary{background:var(--soft);color:var(--primary)}button:disabled{opacity:.5;cursor:not-allowed}
+.studyToggle{display:flex;align-items:center;gap:9px;font-size:.92rem;font-weight:700;color:var(--primary)}.studyToggle input{width:19px;height:19px}
+.guide{background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 20px;overflow:hidden}.guide summary{padding:13px 16px;font-weight:800;cursor:pointer;color:var(--primary)}.guideBody{padding:0 16px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}.guideCard{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fbfdff;line-height:1.5;font-size:.92rem}.guideCard b{display:block;margin-bottom:5px}.formulas{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;color:#475569;line-height:1.6;font-size:.9rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}.qh{display:flex;gap:10px;align-items:flex-start}.n{width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--primary);font-weight:800}.qmain{min-width:0;flex:1}.badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:6px}.badge{font-size:.74rem;font-weight:800;border-radius:999px;padding:3px 8px;background:#f1f5f9;color:#475569}.qt{font-weight:650;line-height:1.55;padding-top:2px}.context{margin-top:8px;color:#475569;font-size:.92rem;line-height:1.5}
+.graphWrap{margin:14px 0 8px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;padding:10px}.graphTitle{font-size:.85rem;color:var(--muted);font-weight:700;margin:0 0 6px}.graphCanvas{display:block;width:100%;height:auto;background:#fff;border-radius:8px}.legend{font-size:.83rem;line-height:1.45;color:#475569;margin-top:7px}
+.answerRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}.answerInput{min-width:180px;max-width:340px;width:100%;border:1px solid #b8c5d8;border-radius:9px;padding:10px 12px;font-size:16px;background:#fff}.answerInput.ok,.vennInput.ok{background:var(--okbg);border-color:#65ad88}.answerInput.bad,.vennInput.bad{background:var(--badbg);border-color:#dd8179}.unitHint{font-size:.84rem;color:var(--muted)}
+.studyCheck{display:none;padding:8px 12px;font-size:.86rem}.studyOn .studyCheck{display:inline-block}
+.exp{display:none;margin-top:12px;background:#f8fafc;border-left:4px solid var(--primary);padding:10px 12px;border-radius:7px;color:#475569;line-height:1.5}.exp b{color:var(--text)}.miniResult{display:none;margin-top:9px;font-size:.9rem;font-weight:700}.miniResult.goodText{color:var(--ok)}.miniResult.badText{color:var(--bad)}
+.diagramStage{position:relative;width:100%;max-width:760px;margin:0 auto}.diagramStage .graphCanvas{width:100%;height:auto}.vennInput{position:absolute;transform:translate(-50%,-50%);width:66px;padding:6px 5px;border:2px solid #93a7c4;border-radius:8px;background:rgba(255,255,255,.96);font-size:15px;text-align:center;font-weight:700;color:var(--text)}.vennInput::placeholder{font-weight:400;color:#94a3b8}.fillHelp{font-size:.84rem;color:var(--muted);margin-top:7px}.subScore{font-size:.84rem;color:var(--muted);margin-top:5px}
+.res{display:none;margin:20px 0;padding:18px;border-radius:14px;border:1px solid var(--line);background:#fff}.good{background:var(--okbg);border-color:#8bc8a9}.mid{background:var(--midbg);border-color:#e6c46f}.low{background:var(--badbg);border-color:#e7a29c}.topicGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:13px}.topicStat{background:rgba(255,255,255,.65);border:1px solid rgba(0,0,0,.08);border-radius:9px;padding:8px 10px;font-size:.88rem}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{margin-top:22px;color:var(--muted);font-size:.92rem;line-height:1.55}.pdfHint{font-size:.84rem;color:var(--muted);margin-top:8px}
+#report{display:none;background:#fff;color:#111;font-family:Arial,sans-serif}.reportHead{border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:16px}.reportHead h1{font-size:22px;margin:0 0 8px}.reportMeta{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:12px}.reportQ{break-inside:avoid;border-bottom:1px solid #bbb;padding:12px 0}.reportQ h2{font-size:13px;margin:0 0 7px}.reportQ p{font-size:11.5px;line-height:1.42;margin:4px 0}.reportQ img{max-width:520px;width:100%;height:auto;border:1px solid #ccc;margin:6px 0}.markOK{font-weight:700;color:#17633f}.markBad{font-weight:700;color:#9f1d16}
+@media(max-width:760px){.student{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.actions button{width:100%}.vennInput{width:54px;font-size:13px;padding:5px 3px}.reportMeta{grid-template-columns:1fr}}
+@media print{body{background:#fff}#app{display:none!important}#report{display:block!important}@page{size:A4;margin:14mm}}
+</style>
+</head>
+<body>
+<div id="app"><main>
+<h1>Combinatoria, probabilidad y diagramas de Venn</h1>
+<div class="sub">Práctica para Gestión Empresarial con respuestas directas. Cada intento contiene <b>10 reactivos balanceados</b> sobre combinaciones y permutaciones, interpretación de su notación, diagramas de Venn de dos y tres conjuntos, probabilidad condicional, eventos mutuamente excluyentes y ejercicios para completar regiones. Los problemas se presentan mediante situaciones de clientes, personal, proveedores, ventas, marketing y toma de decisiones empresariales.</div>
+
+<div class="student">
+  <div class="field"><label for="studentName">Nombre del estudiante</label><input id="studentName" type="text" maxlength="100" autocomplete="name" placeholder="Escribe tu nombre completo"></div>
+  <div class="pdfHint">El nombre aparecerá en el reporte final.</div>
+</div>
+
+<div class="bar">
+  <div class="meta"><span>Intento: <b id="att">1</b></span><span>Preguntas: <b>10</b></span><span>Banco: <b id="bankTotal">—</b></span><span>Respuesta: <b>directa</b></span></div>
+  <label class="studyToggle"><input id="studyMode" type="checkbox"> Modo estudio</label>
+  <button type="button" class="secondary" id="newTop">Nuevo intento</button>
+</div>
+
+<details class="guide">
+<summary>Guía rápida de notación y probabilidad</summary>
+<div class="guideBody">
+  <div class="guideCard"><b>Permutación</b>El orden importa.<br><b>P(n,r)=n!/(n-r)!</b><br>Ejemplo: asignar presidente, secretario y tesorero.</div>
+  <div class="guideCard"><b>Combinación</b>El orden no importa.<br><b>C(n,r)=n!/[r!(n-r)!]</b><br>Ejemplo: elegir integrantes de un comité.</div>
+  <div class="guideCard"><b>Venn</b>A∩B: ambos eventos.<br>A∪B: al menos uno.<br>Aᶜ: fuera de A.<br>“Sólo A”: A pero no B.</div>
+  <div class="guideCard"><b>Probabilidad condicional</b>P(A|B)=P(A∩B)/P(B). Al condicionar por B, el nuevo universo de referencia es B.</div>
+  <div class="guideCard"><b>Mutuamente excluyentes</b>No pueden ocurrir simultáneamente: A∩B=∅, por tanto P(A∩B)=0.</div>
+  <div class="guideCard"><b>Cómo responder</b>En combinatoria escribe el <b>resultado numérico final</b>. En probabilidad se acepta decimal, fracción o porcentaje: 0.25, 1/4 y 25% son equivalentes.</div>
+  <div class="formulas"><b>Importante:</b> en los problemas de combinaciones y permutaciones la calificación se basa en el número correcto de formas posibles, no en cómo escribas la notación. Después de responder, la explicación indica si correspondía C(n,r) o P(n,r). En ejercicios de Venn con varias casillas se otorga crédito parcial por cada región correcta.</div>
+</div>
+</details>
+
+<form id="form">
+<div id="qs"></div>
+<div class="res" id="res" aria-live="polite"></div>
+<div class="actions">
+  <button class="primary" type="submit" id="grade">Calificar intento</button>
+  <button class="secondary" type="button" id="new">Generar otro intento</button>
+  <button class="secondary" type="button" id="review" style="display:none">Repasar sólo errores</button>
+  <button class="secondary" type="button" id="pdf" style="display:none">Generar PDF</button>
+</div>
+</form>
+<div class="note"><b>Modo estudio:</b> activa el modo estudio para mostrar un botón de comprobación en cada reactivo. Con el modo estudio desactivado, las respuestas se revelan únicamente al calificar el intento. En combinatoria se evalúa el resultado numérico; en probabilidad puedes escribir decimal, fracción o porcentaje y se acepta redondeo razonable.</div>
+</main></div>
+<section id="report"></section>
+
+<script>
+'use strict';
+
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const factorial=n=>{let r=1;for(let i=2;i<=n;i++)r*=i;return r};
+const perm=(n,r)=>factorial(n)/factorial(n-r);
+const comb=(n,r)=>factorial(n)/(factorial(r)*factorial(n-r));
+const round4=x=>Math.round(x*10000)/10000;
+const escapeHtml=s=>String(s).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+
+function numberAnswer(value,kind='probability',tol=null){return {type:'number',value,kind,tol:tol??(kind==='probability'?0.005:1e-9)}}
+function makeQuestion(o){return {kind:'input',context:'',graph:null,scenario:'',...o}}
+
+const NOTATION_BANK=[
+ makeQuestion({q:'Una empresa tiene 9 candidatos elegibles y asignará 3 cargos distintos. El conteo se representa como P(9,3). En esa notación, ¿cuál es el valor de n?',answer:numberAnswer(9,'integer'),exp:'n representa el número total de elementos disponibles. Aquí hay 9 candidatos, por eso n=9.',topic:'Combinatoria',tag:'Interpretar notación',scenario:'not1'}),
+ makeQuestion({q:'Una empresa tiene 9 candidatos elegibles y asignará 3 cargos distintos. El conteo se representa como P(9,3). En esa notación, ¿cuál es el valor de r?',answer:numberAnswer(3,'integer'),exp:'r representa cuántos elementos se seleccionan y ordenan. Como se asignan 3 cargos, r=3.',topic:'Combinatoria',tag:'Interpretar notación',scenario:'not2'}),
+ makeQuestion({q:'Recursos Humanos tiene 12 colaboradores elegibles y seleccionará 5 para un grupo de trabajo sin cargos distintos. El conteo se representa como C(12,5). ¿Cuál es el valor de n?',answer:numberAnswer(12,'integer'),exp:'n es el total de elementos disponibles. En este caso existen 12 colaboradores elegibles.',topic:'Combinatoria',tag:'Interpretar notación',scenario:'not3'}),
+ makeQuestion({q:'Recursos Humanos tiene 12 colaboradores elegibles y seleccionará 5 para un grupo de trabajo sin cargos distintos. El conteo se representa como C(12,5). ¿Cuál es el valor de r?',answer:numberAnswer(5,'integer'),exp:'r es la cantidad de elementos que se eligen. Se seleccionan 5 colaboradores, por lo que r=5.',topic:'Combinatoria',tag:'Interpretar notación',scenario:'not4'}),
+ makeQuestion({q:'Cinco gerentes presentarán resultados en cinco turnos consecutivos y todos los órdenes son posibles. El número de órdenes es 5!. ¿Cuánto vale 5!?',answer:numberAnswer(120,'integer'),exp:'5!=5×4×3×2×1=120 órdenes posibles.',topic:'Combinatoria',tag:'Factorial',scenario:'not5'}),
+ makeQuestion({q:'Al simplificar C(10,10) aparece 0! en la fórmula. ¿Cuál es el valor de 0!?',answer:numberAnswer(1,'integer'),exp:'Por definición, 0!=1. Esta convención mantiene consistentes las fórmulas de combinaciones y permutaciones.',topic:'Combinatoria',tag:'Factorial',scenario:'not6'}),
+ makeQuestion({q:'Una sucursal tiene 7 vendedores y asignará dos responsabilidades distintas: abrir la reunión y presentar el cierre. El cálculo se expresa como P(7,2). ¿Cuántas asignaciones diferentes existen?',answer:numberAnswer(42,'integer'),exp:'Como las responsabilidades son distintas, importa quién ocupa cada una: P(7,2)=7×6=42.',topic:'Combinatoria',tag:'Calcular P(n,r)',scenario:'not7'}),
+ makeQuestion({q:'Marketing tiene 7 propuestas y elegirá 2 para una prueba piloto sin jerarquizarlas. El cálculo se expresa como C(7,2). ¿Cuántos pares diferentes existen?',answer:numberAnswer(21,'integer'),exp:'Como sólo importa cuáles dos propuestas se eligen, C(7,2)=21.',topic:'Combinatoria',tag:'Calcular C(n,r)',scenario:'not8'}),
+ makeQuestion({q:'Seis responsables de área expondrán uno después de otro en una reunión. ¿Cuántos órdenes de exposición son posibles?',answer:numberAnswer(720,'integer'),exp:'Se ordenan los 6 elementos disponibles: P(6,6)=6!=720.',topic:'Combinatoria',tag:'Caso especial',scenario:'not9'}),
+ makeQuestion({q:'Una empresa tiene 10 proyectos candidatos, pero en esta etapa decide no seleccionar ninguno. ¿Cuántas selecciones distintas de 0 proyectos pueden hacerse?',answer:numberAnswer(1,'integer'),exp:'C(10,0)=1: existe una sola selección que contiene cero proyectos.',topic:'Combinatoria',tag:'Caso especial',scenario:'not10'}),
+ makeQuestion({q:'Una empresa tiene 10 proyectos candidatos y decide incluir los 10 en el portafolio. ¿Cuántos grupos distintos de 10 proyectos puede formar?',answer:numberAnswer(1,'integer'),exp:'C(10,10)=1: sólo existe un grupo que contiene a los 10 proyectos.',topic:'Combinatoria',tag:'Caso especial',scenario:'not11'}),
+ makeQuestion({q:'Entre 8 ejecutivos disponibles se elegirá una sola persona para representar a la empresa en una reunión. ¿Cuántas elecciones posibles existen?',answer:numberAnswer(8,'integer'),exp:'Elegir una persona de 8 produce 8 posibilidades; equivalentemente P(8,1)=8 y C(8,1)=8.',topic:'Combinatoria',tag:'Caso especial',scenario:'not12'})
+];
+
+const COMB_CONTEXTS=[
+ {id:'cc1',q:'La gerencia de una empresa de servicios formará un comité temporal de 3 personas a partir de 9 colaboradores que cumplen el perfil. Todos tendrán el mismo rol dentro del comité. ¿Cuántos comités diferentes pueden formarse?',n:9,r:3,type:'C'},
+ {id:'cc2',q:'El área de Compras tiene 10 proveedores preaprobados y seleccionará 4 para solicitarles una cotización formal. El orden de selección no representa prioridad. ¿Cuántos grupos diferentes de proveedores puede seleccionar?',n:10,r:4,type:'C'},
+ {id:'cc3',q:'Marketing tiene 7 propuestas de campaña y elegirá 2 para probarlas durante el próximo mes. Ninguna tendrá prioridad sobre la otra. ¿Cuántos pares de campañas distintos puede elegir?',n:7,r:2,type:'C'},
+ {id:'cc4',q:'Recursos Humanos cuenta con 12 colaboradores voluntarios y elegirá 5 para participar en un grupo focal sobre clima laboral. ¿Cuántos grupos diferentes puede formar?',n:12,r:5,type:'C'},
+ {id:'cc5',q:'Una empresa reconocerá a los tres mejores vendedores del trimestre entre 8 participantes, asignando primer, segundo y tercer lugar. ¿De cuántas maneras distintas puede quedar el podio?',n:8,r:3,type:'P'},
+ {id:'cc6',q:'De 10 integrantes de un equipo se asignarán tres cargos distintos para un proyecto: coordinador, responsable financiero y responsable de seguimiento. ¿Cuántas asignaciones diferentes pueden hacerse?',n:10,r:3,type:'P'},
+ {id:'cc7',q:'En una jornada empresarial hay 7 presentaciones candidatas, pero sólo 4 ocuparán los horarios de 9:00, 10:00, 11:00 y 12:00. ¿Cuántas agendas diferentes pueden elaborarse?',n:7,r:4,type:'P'},
+ {id:'cc8',q:'Un comité evaluó 9 proyectos y entregará reconocimientos de primero, segundo y tercer lugar. ¿Cuántos resultados ordenados diferentes son posibles?',n:9,r:3,type:'P'},
+ {id:'cc9',q:'Innovación tiene 8 ideas de producto y elegirá 3 para pasar a la etapa de validación. Las tres avanzarán con la misma categoría. ¿Cuántos grupos distintos pueden seleccionarse?',n:8,r:3,type:'C'},
+ {id:'cc10',q:'Una cadena tiene 6 sucursales y seleccionará 2 para realizar una auditoría interna este mes. El orden de las sucursales no importa. ¿Cuántas selecciones distintas puede hacer?',n:6,r:2,type:'C'},
+ {id:'cc11',q:'De 7 aspirantes se cubrirán dos puestos distintos: gerente de sucursal y asistente administrativo. ¿Cuántas asignaciones diferentes de personas a los puestos son posibles?',n:7,r:2,type:'P'},
+ {id:'cc12',q:'La dirección tiene 6 proyectos de mejora y elegirá 3 para ejecutarlos en orden de prioridad 1, 2 y 3. ¿Cuántas listas de prioridades distintas puede establecer?',n:6,r:3,type:'P'},
+ {id:'cc13',q:'Una empresa tiene 11 candidatos externos y elegirá 4 para integrar un panel de entrevista grupal. Todos participarán en igualdad de condiciones. ¿Cuántos paneles diferentes puede formar?',n:11,r:4,type:'C'},
+ {id:'cc14',q:'Una tienda en línea tiene 8 productos candidatos para ocupar tres espacios distintos en su portada: destacado principal, segundo y tercero. ¿Cuántas portadas diferentes pueden diseñarse?',n:8,r:3,type:'P'},
+ {id:'cc15',q:'La empresa tiene 9 cursos de capacitación disponibles y financiará 2 durante el semestre. No existe prioridad entre los cursos seleccionados. ¿Cuántos pares distintos puede elegir?',n:9,r:2,type:'C'},
+ {id:'cc16',q:'La dirección recibió 10 propuestas de inversión y elegirá 3 para clasificarlas como primera, segunda y tercera prioridad. ¿Cuántas clasificaciones diferentes puede producir?',n:10,r:3,type:'P'},
+ {id:'cc17',q:'Auditoría interna tiene 13 sucursales y elegirá 4 para una revisión sorpresa durante el trimestre. El orden en que se anuncien no forma parte de la selección. ¿Cuántos grupos de sucursales son posibles?',n:13,r:4,type:'C'},
+ {id:'cc18',q:'Una empresa tiene 9 supervisores disponibles y debe asignar tres zonas comerciales distintas: norte, centro y sur. Cada zona tendrá un supervisor diferente. ¿Cuántas asignaciones son posibles?',n:9,r:3,type:'P'},
+ {id:'cc19',q:'Una tienda mayorista tiene 10 productos candidatos y elegirá 3 para integrar un paquete promocional. La posición de cada producto dentro del paquete no importa. ¿Cuántos paquetes diferentes puede formar?',n:10,r:3,type:'C'},
+ {id:'cc20',q:'Ocho finalistas serán considerados para ocupar cuatro horarios distintos de entrevista durante una mañana. ¿Cuántas agendas diferentes pueden construirse?',n:8,r:4,type:'P'},
+ {id:'cc21',q:'Un tablero de gestión dispone de 7 indicadores candidatos y la gerencia elegirá 2 para una prueba piloto. ¿Cuántas parejas distintas de indicadores puede seleccionar?',n:7,r:2,type:'C'},
+ {id:'cc22',q:'Entre 9 responsables de área se nombrarán un líder y un suplente para representar a la empresa ante un cliente. ¿Cuántas asignaciones distintas son posibles?',n:9,r:2,type:'P'},
+ {id:'cc23',q:'Una cadena comercial tiene 8 sucursales candidatas a remodelación y dispone de presupuesto para intervenir 3. ¿Cuántos grupos distintos de sucursales puede seleccionar?',n:8,r:3,type:'C'},
+ {id:'cc24',q:'El comité de riesgos identificó 7 riesgos prioritarios y elegirá 3 para atenderlos en orden: primero, segundo y tercero. ¿Cuántas listas ordenadas distintas puede generar?',n:7,r:3,type:'P'}
+];
+const COMB_BANK=[];
+COMB_CONTEXTS.forEach(c=>{
+  const value=c.type==='P'?perm(c.n,c.r):comb(c.n,c.r);
+  COMB_BANK.push(makeQuestion({q:c.q,answer:numberAnswer(value,'integer'),exp:`${c.type==='P'?'Aquí el orden, el puesto o la prioridad sí cambia el resultado, por lo que corresponde una permutación.':'Aquí sólo importa qué elementos son elegidos; el orden no crea un resultado nuevo, por lo que corresponde una combinación.'} Se modela con ${c.type}(${c.n},${c.r}) y el resultado es ${value}.`,topic:'Combinatoria',tag:'Problema contextual',scenario:c.id}));
+});
+
+const VENN2_SCENARIOS=[
+ {id:'v2_1',N:100,unit:'cliente',A:'realizó al menos una compra en tienda física',B:'realizó al menos una compra en línea',onlyA:28,both:22,onlyB:34,none:16,context:'Al cierre del mes, el área comercial estudia una muestra de 100 clientes para decidir cómo repartir el presupuesto entre canales. Se registra si cada cliente compró en tienda física, en línea, en ambos canales o en ninguno durante el periodo.'},
+ {id:'v2_2',N:100,unit:'cliente',A:'recibió una promoción por correo electrónico',B:'vio una promoción de la empresa en redes sociales',onlyA:24,both:18,onlyB:38,none:20,context:'Marketing evalúa el alcance de dos canales de comunicación entre 100 clientes antes de diseñar la siguiente campaña. Un mismo cliente pudo haber estado expuesto a ambos canales.'},
+ {id:'v2_3',N:100,unit:'cliente',A:'utilizó tarjeta al menos una vez',B:'utilizó transferencia bancaria al menos una vez',onlyA:31,both:19,onlyB:27,none:23,context:'Finanzas revisa los métodos de pago utilizados por 100 clientes durante el trimestre para decidir qué opciones conviene destacar en el portal de cobro. Un cliente puede haber usado más de un método.'},
+ {id:'v2_4',N:90,unit:'colaborador',A:'tomó el curso de ventas',B:'tomó el curso de Excel',onlyA:26,both:14,onlyB:30,none:20,context:'Recursos Humanos revisa el historial de capacitación de 90 colaboradores antes de preparar el plan anual. Cada persona pudo cursar ventas, Excel, ambos cursos o ninguno.'},
+ {id:'v2_5',N:100,unit:'cliente',A:'prefiere recibir descuentos directos',B:'prefiere recibir envío gratuito',onlyA:35,both:25,onlyB:30,none:10,context:'Una tienda en línea encuesta a 100 clientes para diseñar su próxima promoción. Se pregunta por dos beneficios que pueden gustar simultáneamente: descuentos directos y envío gratuito.'},
+ {id:'v2_6',N:60,unit:'proveedor',A:'cumplió la meta de entrega puntual',B:'mantuvo el precio dentro del objetivo',onlyA:18,both:12,onlyB:20,none:10,context:'El área de Compras evalúa a 60 proveedores al cierre del trimestre. Para cada proveedor registra si cumplió la meta de puntualidad y si mantuvo el precio negociado dentro del objetivo.'},
+ {id:'v2_7',N:100,unit:'cliente',A:'calificó el servicio como rápido',B:'calificó el trato como amable',onlyA:32,both:28,onlyB:25,none:15,context:'Servicio al cliente analiza 100 encuestas posteriores a una atención. Cada persona indicó si percibió rapidez y si percibió amabilidad; ambas opiniones pueden presentarse al mismo tiempo.'},
+ {id:'v2_8',N:100,unit:'cliente',A:'compró el producto A',B:'compró el producto B',onlyA:40,both:15,onlyB:25,none:20,context:'El equipo de ventas analiza las compras de 100 clientes para estudiar oportunidades de venta cruzada entre dos productos. Un cliente pudo adquirir uno, ambos o ninguno durante el periodo.'}
+];
+
+function venn2Graph(s,mode='overlap'){return {type:mode==='mutual'?'mutual':'venn2',labels:{A:s.A,B:s.B},regions:{onlyA:s.onlyA,both:s.both,onlyB:s.onlyB,none:s.none},N:s.N}}
+function probExp(num,N,label){const p=num/N;return `${label} contiene ${num} de ${N} casos. Por tanto, la probabilidad es ${num}/${N}=${round4(p)} (${round4(p*100)}%).`}
+const VENN2_BANK=[];
+const CONDITIONAL_BANK=[];
+const INTEGRATION_BANK=[];
+VENN2_SCENARIOS.forEach(s=>{
+  const A=s.onlyA+s.both,B=s.onlyB+s.both,union=s.onlyA+s.both+s.onlyB;
+  const qs=[
+    [`Si se selecciona al azar un ${s.unit} del estudio, calcula P(A): la probabilidad de que ${s.A}.`, 'P(A)',A,`A incluye todas las regiones dentro del círculo A.`, 'Lectura'],
+    [`Si se selecciona al azar un ${s.unit} del estudio, calcula P(B): la probabilidad de que ${s.B}.`, 'P(B)',B,`B incluye todas las regiones dentro del círculo B.`, 'Lectura'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que se cumplan simultáneamente A y B? Calcula P(A∩B).`, 'P(A∩B)',s.both,'La intersección A∩B corresponde a los casos que pertenecen a ambos conjuntos.', 'Intersección'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que se cumpla A, B o ambos? Calcula P(A∪B).`, 'P(A∪B)',union,'La unión A∪B incluye sólo A, la intersección y sólo B.', 'Unión'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que se cumpla A pero no B? Calcula P(sólo A).`, 'P(sólo A)',s.onlyA,'“Sólo A” incluye la región exclusiva de A y excluye la intersección con B.', 'Diferencia'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que no se cumpla ni A ni B?`, 'P(ninguno)',s.none,'La región exterior a ambos círculos corresponde a los casos que no pertenecen a ninguno de los dos conjuntos.', 'Complemento']
+  ];
+  qs.forEach(([question,symbol,count,why,tag],k)=>{
+    const q=makeQuestion({q:question,context:s.context,graph:venn2Graph(s),answer:numberAnswer(count/s.N),exp:`${why} ${probExp(count,s.N,symbol)}`,topic:'Venn: 2 conjuntos',tag,scenario:s.id+'_'+k});
+    VENN2_BANK.push(q); if(['Unión','Diferencia','Complemento'].includes(tag))INTEGRATION_BANK.push(q);
+  });
+  const c1=makeQuestion({q:`Se sabe que el ${s.unit} seleccionado pertenece a B (${s.B}). ¿Cuál es la probabilidad de que también pertenezca a A (${s.A})? Calcula P(A|B).`,context:s.context,graph:venn2Graph(s),answer:numberAnswer(s.both/B),exp:`Al condicionar por B, el universo se reduce a los ${B} casos de B. De ellos, ${s.both} también están en A. Así, P(A|B)=${s.both}/${B}=${round4(s.both/B)}.`,topic:'Probabilidad condicional',tag:'Venn 2 conjuntos',scenario:s.id+'_cab'});
+  const c2=makeQuestion({q:`Se sabe que el ${s.unit} seleccionado pertenece a A (${s.A}). ¿Cuál es la probabilidad de que también pertenezca a B (${s.B})? Calcula P(B|A).`,context:s.context,graph:venn2Graph(s),answer:numberAnswer(s.both/A),exp:`Al condicionar por A, el universo se reduce a los ${A} casos de A. De ellos, ${s.both} también están en B. Así, P(B|A)=${s.both}/${A}=${round4(s.both/A)}.`,topic:'Probabilidad condicional',tag:'Venn 2 conjuntos',scenario:s.id+'_cba'});
+  CONDITIONAL_BANK.push(c1,c2);
+});
+
+const VENN3_SCENARIOS=[
+ {id:'v3_1',N:100,unit:'cliente',A:'utiliza la app móvil',B:'utiliza el sitio web',C:'compra en tienda física',a:18,b:15,c:20,ab:10,ac:8,bc:9,abc:12,none:8,context:'Una cadena omnicanal analiza a 100 clientes para decidir dónde invertir en experiencia de compra. Durante el último mes se registró si cada cliente utilizó la app móvil, el sitio web y la tienda física; una persona pudo utilizar varios canales.'},
+ {id:'v3_2',N:100,unit:'cliente',A:'recibe correo promocional',B:'sigue las redes sociales de la marca',C:'recibe mensajes promocionales por WhatsApp',a:16,b:20,c:14,ab:12,ac:8,bc:10,abc:15,none:5,context:'El área de Marketing revisa a 100 clientes antes de redistribuir su presupuesto de comunicación. Se estudia el alcance de correo electrónico, redes sociales y WhatsApp, que pueden llegar al mismo cliente.'},
+ {id:'v3_3',N:100,unit:'colaborador',A:'domina Excel',B:'ha recibido capacitación en ventas',C:'tiene inglés funcional',a:20,b:18,c:14,ab:10,ac:8,bc:7,abc:9,none:14,context:'Recursos Humanos construye un mapa de habilidades de 100 colaboradores para planear promociones y capacitación. Se registran tres competencias que pueden coexistir en una misma persona.'},
+ {id:'v3_4',N:80,unit:'proveedor',A:'cumple la meta de precio',B:'cumple la meta de calidad',C:'cumple la meta de puntualidad',a:12,b:15,c:11,ab:8,ac:7,bc:6,abc:10,none:11,context:'Compras prepara la renovación de contratos de 80 proveedores. Para cada uno se revisa el cumplimiento de las metas de precio, calidad y puntualidad; un proveedor puede cumplir una, varias o ninguna.'},
+ {id:'v3_5',N:120,unit:'cliente',A:'compró alimentos',B:'compró artículos de limpieza',C:'compró artículos de oficina',a:22,b:18,c:16,ab:12,ac:10,bc:9,abc:14,none:19,context:'Una tienda mayorista analiza las compras de 120 clientes para diseñar paquetes y promociones cruzadas. Se registra si cada cliente compró alimentos, artículos de limpieza y artículos de oficina durante el mes.'},
+ {id:'v3_6',N:100,unit:'cliente',A:'utiliza el programa de lealtad',B:'utiliza cupones',C:'aprovecha el envío gratuito',a:17,b:16,c:15,ab:11,ac:9,bc:8,abc:13,none:11,context:'Comercial analiza a 100 clientes para valorar el desempeño de tres beneficios. Se registra el uso del programa de lealtad, cupones y envío gratuito; los beneficios pueden combinarse.'}
+];
+function venn3Graph(s){return {type:'venn3',labels:{A:s.A,B:s.B,C:s.C},regions:{a:s.a,b:s.b,c:s.c,ab:s.ab,ac:s.ac,bc:s.bc,abc:s.abc,none:s.none},N:s.N}}
+const VENN3_BANK=[];
+VENN3_SCENARIOS.forEach(s=>{
+  const A=s.a+s.ab+s.ac+s.abc,B=s.b+s.ab+s.bc+s.abc,C=s.c+s.ac+s.bc+s.abc;
+  const AB=s.ab+s.abc, unionAB=A+B-AB, exactly1=s.a+s.b+s.c, exactly2=s.ab+s.ac+s.bc, atLeast2=exactly2+s.abc;
+  const specs=[
+    [`Si se selecciona al azar un ${s.unit}, calcula P(A): la probabilidad de que ${s.A}.`,'P(A)',A,'A incluye todas las regiones dentro del círculo A.','Lectura'],
+    [`Si se selecciona al azar un ${s.unit}, calcula P(B): la probabilidad de que ${s.B}.`,'P(B)',B,'B incluye todas las regiones dentro del círculo B.','Lectura'],
+    [`Si se selecciona al azar un ${s.unit}, calcula P(C): la probabilidad de que ${s.C}.`,'P(C)',C,'C incluye todas las regiones dentro del círculo C.','Lectura'],
+    [`Si se selecciona al azar un ${s.unit}, calcula P(A∩B): la probabilidad de que se cumplan A y B, sin importar si también se cumple C.`,'P(A∩B)',AB,'A∩B incluye la región A-B solamente y también la intersección triple.','Intersección'],
+    [`Si se selecciona al azar un ${s.unit}, calcula P(A∪B): la probabilidad de que se cumpla A, B o ambos.`,'P(A∪B)',unionAB,'A∪B incluye a todos los casos que estén en A, en B o en ambos.','Unión'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que pertenezca exactamente a uno de los tres conjuntos?`,'P(exactamente un conjunto)',exactly1,'Se suman únicamente las tres regiones exclusivas: sólo A, sólo B y sólo C.','Exactamente uno'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que pertenezca exactamente a dos de los tres conjuntos?`,'P(exactamente dos conjuntos)',exactly2,'Se suman A∩B solamente, A∩C solamente y B∩C solamente; no se incluye la triple.','Exactamente dos'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que pertenezca al menos a dos de los tres conjuntos?`,'P(al menos dos conjuntos)',atLeast2,'Se incluyen las tres intersecciones dobles exclusivas y también A∩B∩C.','Al menos dos'],
+    [`Si se selecciona al azar un ${s.unit}, ¿cuál es la probabilidad de que no pertenezca a ninguno de los tres conjuntos?`,'P(ninguno)',s.none,'La región exterior a los tres círculos representa los casos que no pertenecen a ningún conjunto.','Complemento']
+  ];
+  specs.forEach(([question,symbol,count,why,tag],k)=>{
+    const q=makeQuestion({q:question,context:s.context,graph:venn3Graph(s),answer:numberAnswer(count/s.N),exp:`${why} ${probExp(count,s.N,symbol)}`,topic:'Venn: 3 conjuntos',tag,scenario:s.id+'_'+k});
+    VENN3_BANK.push(q); if(['Unión','Exactamente uno','Exactamente dos','Al menos dos','Complemento'].includes(tag))INTEGRATION_BANK.push(q);
+  });
+  const cond=makeQuestion({q:`Se sabe que el ${s.unit} seleccionado pertenece a B (${s.B}). ¿Cuál es la probabilidad de que también pertenezca a A (${s.A})? Calcula P(A|B).`,context:s.context,graph:venn3Graph(s),answer:numberAnswer(AB/B),exp:`Dentro de B hay ${B} casos. Los que también pertenecen a A son ${s.ab}+${s.abc}=${AB}. Por tanto P(A|B)=${AB}/${B}=${round4(AB/B)}.`,topic:'Probabilidad condicional',tag:'Venn 3 conjuntos',scenario:s.id+'_cond'});
+  CONDITIONAL_BANK.push(cond);
+});
+
+const FILL_BANK=[];
+VENN2_SCENARIOS.forEach((s,idx)=>{
+  const A=s.onlyA+s.both,B=s.onlyB+s.both;
+  FILL_BANK.push({kind:'fill2',q:'El reporte sólo conserva los totales generales. Reconstruye la tabla visual completando las cuatro regiones del diagrama.',context:`${s.context} Para reconstruir el segmento se sabe que N=${s.N}, |A|=${A}, |B|=${B} y |A∩B|=${s.both}. Escribe en cada región el número de casos correspondiente.`,graph:{...venn2Graph(s),blank:true},answers:[
+    {key:'onlyA',label:'Sólo A',value:s.onlyA},{key:'both',label:'A∩B',value:s.both},{key:'onlyB',label:'Sólo B',value:s.onlyB},{key:'none',label:'Ninguno',value:s.none}
+  ],exp:`Primero coloca A∩B=${s.both}. Luego sólo A=${A}-${s.both}=${s.onlyA}; sólo B=${B}-${s.both}=${s.onlyB}; y ninguno=${s.N}-(${s.onlyA}+${s.both}+${s.onlyB})=${s.none}.`,topic:'Diagramas de Venn',tag:'Completar Venn 2',scenario:'fill2_'+idx});
+});
+VENN3_SCENARIOS.forEach((s,idx)=>{
+  const A=s.a+s.ab+s.ac+s.abc,B=s.b+s.ab+s.bc+s.abc,C=s.c+s.ac+s.bc+s.abc,AB=s.ab+s.abc,AC=s.ac+s.abc,BC=s.bc+s.abc;
+  FILL_BANK.push({kind:'fill3',q:'El analista necesita reconstruir el detalle del reporte. Completa las ocho regiones del diagrama de Venn.',context:`${s.context} Sólo se conservaron estos totales: N=${s.N}, |A|=${A}, |B|=${B}, |C|=${C}, |A∩B|=${AB}, |A∩C|=${AC}, |B∩C|=${BC} y |A∩B∩C|=${s.abc}. Escribe el número de casos de cada región.`,graph:{...venn3Graph(s),blank:true},answers:[
+    {key:'a',label:'Sólo A',value:s.a},{key:'b',label:'Sólo B',value:s.b},{key:'c',label:'Sólo C',value:s.c},{key:'ab',label:'A∩B sólo',value:s.ab},{key:'ac',label:'A∩C sólo',value:s.ac},{key:'bc',label:'B∩C sólo',value:s.bc},{key:'abc',label:'A∩B∩C',value:s.abc},{key:'none',label:'Ninguno',value:s.none}
+  ],exp:`Empieza por la triple: ${s.abc}. Después resta esa triple de cada intersección doble: AB sólo=${AB}-${s.abc}=${s.ab}, AC sólo=${AC}-${s.abc}=${s.ac}, BC sólo=${BC}-${s.abc}=${s.bc}. Luego obtén las regiones exclusivas de A, B y C y finalmente el exterior: ${s.none}.`,topic:'Diagramas de Venn',tag:'Completar Venn 3',scenario:'fill3_'+idx});
+});
+
+const MUTUAL_SCENARIOS=[
+ {id:'m1',N:100,unit:'compra',A:'fue pagada en efectivo',B:'fue pagada con tarjeta',onlyA:32,onlyB:58,none:10,context:'Tesorería revisa 100 operaciones de una caja en la que cada compra se liquida con un único método principal. Para este análisis, “efectivo” y “tarjeta” son categorías mutuamente excluyentes.'},
+ {id:'m2',N:80,unit:'colaborador',A:'fue asignado al turno matutino',B:'fue asignado al turno vespertino',onlyA:35,onlyB:39,none:6,context:'Operaciones revisa la asignación diaria de 80 colaboradores. Para ese día, una persona no puede estar simultáneamente en el turno matutino y en el vespertino.'},
+ {id:'m3',N:60,unit:'proveedor',A:'fue aprobado',B:'fue rechazado',onlyA:42,onlyB:18,none:0,context:'Después de una evaluación documental, Compras clasifica 60 proveedores. En la decisión final, cada proveedor queda aprobado o rechazado, nunca en ambas categorías.'},
+ {id:'m4',N:120,unit:'compra',A:'corresponde a un cliente nuevo',B:'corresponde a un cliente recurrente',onlyA:44,onlyB:76,none:0,context:'Comercial analiza 120 compras y clasifica cada operación según el historial del comprador. Para ese registro, una compra queda asociada a un cliente nuevo o a uno recurrente.'},
+ {id:'m5',N:100,unit:'encuestado',A:'respondió sí',B:'respondió no',onlyA:63,onlyB:31,none:6,context:'En una encuesta de 100 personas se estudia una pregunta de respuesta única. “Sí” y “No” no pueden ocurrir simultáneamente; algunas personas dejaron la pregunta sin contestar.'}
+];
+const MUTUAL_BANK=[];
+MUTUAL_SCENARIOS.forEach(s=>{
+  const graph={type:'mutual',labels:{A:s.A,B:s.B},regions:{onlyA:s.onlyA,both:0,onlyB:s.onlyB,none:s.none},N:s.N};
+  MUTUAL_BANK.push(makeQuestion({q:`Si se selecciona al azar una ${s.unit}, ¿cuál es la probabilidad de que pertenezca simultáneamente a A y B? Calcula P(A∩B).`,context:s.context,graph,answer:numberAnswer(0),exp:'Si dos eventos son mutuamente excluyentes, no pueden ocurrir a la vez. Por definición, P(A∩B)=0.',topic:'Eventos',tag:'Mutuamente excluyentes',scenario:s.id+'_i'}));
+  MUTUAL_BANK.push(makeQuestion({q:`Si se selecciona al azar una ${s.unit}, ¿cuál es la probabilidad de que pertenezca a A o a B? Calcula P(A∪B).`,context:s.context,graph,answer:numberAnswer((s.onlyA+s.onlyB)/s.N),exp:`Al ser mutuamente excluyentes, P(A∪B)=P(A)+P(B)=(${s.onlyA}+${s.onlyB})/${s.N}=${round4((s.onlyA+s.onlyB)/s.N)}.`,topic:'Eventos',tag:'Mutuamente excluyentes',scenario:s.id+'_u'}));
+  MUTUAL_BANK.push(makeQuestion({q:`Si se sabe que la ${s.unit} pertenece a B, ¿cuál es la probabilidad de que también pertenezca a A? Calcula P(A|B).`,context:s.context,graph,answer:numberAnswer(0),exp:'Dentro de B no hay casos que también pertenezcan a A; por ello P(A|B)=0, siempre que P(B)>0.',topic:'Probabilidad condicional',tag:'Mutuamente excluyentes',scenario:s.id+'_c'}));
+  MUTUAL_BANK.push(makeQuestion({q:`Si se selecciona al azar una ${s.unit}, ¿cuál es la probabilidad de que no pertenezca ni a A ni a B?`,context:s.context,graph,answer:numberAnswer(s.none/s.N),exp:probExp(s.none,s.N,'P(ninguno)'),topic:'Eventos',tag:'Complemento',scenario:s.id+'_n'}));
+});
+
+const ALL_BANK=[...NOTATION_BANK,...COMB_BANK,...VENN2_BANK,...VENN3_BANK,...FILL_BANK,...CONDITIONAL_BANK,...MUTUAL_BANK];
+
+function classifyPools(){
+  return {
+    notation:NOTATION_BANK,
+    comb:COMB_BANK,
+    venn2basic:VENN2_BANK.filter(q=>['Lectura','Intersección'].includes(q.tag)),
+    venn2ops:VENN2_BANK.filter(q=>['Unión','Diferencia','Complemento'].includes(q.tag)),
+    venn3basic:VENN3_BANK.filter(q=>['Lectura','Intersección'].includes(q.tag)),
+    venn3ops:VENN3_BANK.filter(q=>['Unión','Exactamente uno','Exactamente dos','Al menos dos','Complemento'].includes(q.tag)),
+    fill:FILL_BANK,
+    conditional:CONDITIONAL_BANK,
+    mutual:MUTUAL_BANK.filter(q=>q.tag==='Mutuamente excluyentes'),
+    integration:INTEGRATION_BANK
+  }
+}
+
+function pickUnique(pool,seen){
+  const eligible=shuffle(pool).filter(q=>!seen.has(q.scenario));
+  const q=(eligible[0]||shuffle(pool)[0]);
+  if(q)seen.add(q.scenario);
+  return q;
+}
+function buildExam(){
+  const p=classifyPools(),seen=new Set();
+  return shuffle([
+    pickUnique(p.notation,seen),pickUnique(p.comb,seen),pickUnique(p.venn2basic,seen),pickUnique(p.venn2ops,seen),
+    pickUnique(p.venn3basic,seen),pickUnique(p.venn3ops,seen),pickUnique(p.fill,seen),pickUnique(p.conditional,seen),
+    pickUnique(p.mutual,seen),pickUnique(p.integration,seen)
+  ].filter(Boolean));
+}
+
+function parseNumeric(raw){
+  if(raw==null)return NaN;let s=String(raw).trim().replace(/\s+/g,'');if(!s)return NaN;
+  let pct=false;if(s.endsWith('%')){pct=true;s=s.slice(0,-1)}
+  s=s.replace(',','.');
+  let val;
+  if(/^[-+]?\d*\.?\d+\/[-+]?\d*\.?\d+$/.test(s)){
+    const [a,b]=s.split('/').map(Number);if(!Number.isFinite(a)||!Number.isFinite(b)||b===0)return NaN;val=a/b;
+  }else val=Number(s);
+  if(!Number.isFinite(val))return NaN;return pct?val/100:val;
+}
+function isCorrect(raw,a){
+  const v=parseNumeric(raw);if(!Number.isFinite(v))return false;
+  if(a.kind==='integer')return Math.abs(v-a.value)<1e-9;
+  return Math.abs(v-a.value)<=a.tol;
+}
+function displayAnswer(a){
+  if(a.kind==='integer')return String(a.value);
+  return `${round4(a.value)} (${round4(a.value*100)}%)`;
+}
+
+function canvasSetup(canvas){
+  const cssW=Math.max(300,canvas.clientWidth||760),ratio=340/760,cssH=cssW*ratio,dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(cssW*dpr);canvas.height=Math.round(cssH*dpr);canvas.style.height=cssH+'px';
+  const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w:cssW,h:cssH,s:cssW/760};
+}
+function drawText(c,text,x,y,size=17,weight='700',align='center'){c.fillStyle='#263750';c.font=`${weight} ${size}px Segoe UI, Arial`;c.textAlign=align;c.textBaseline='middle';c.fillText(String(text),x,y)}
+function drawVenn(canvas,g){
+  const {c,w,h,s}=canvasSetup(canvas);c.clearRect(0,0,w,h);c.fillStyle='#fff';c.fillRect(0,0,w,h);
+  c.strokeStyle='#94a3b8';c.lineWidth=1.5;c.strokeRect(12*s,12*s,736*s,316*s);drawText(c,`N = ${g.N}`,30*s,30*s,13,'700','left');
+  c.save();c.globalAlpha=.18;
+  if(g.type==='venn3'){
+    const circles=[[320,135],[440,135],[380,225]];['#3b82f6','#10b981','#f59e0b'].forEach((col,i)=>{c.fillStyle=col;c.beginPath();c.arc(circles[i][0]*s,circles[i][1]*s,112*s,0,Math.PI*2);c.fill()});
+    c.restore();c.strokeStyle='#64748b';c.lineWidth=2;
+    circles.forEach(([x,y])=>{c.beginPath();c.arc(x*s,y*s,112*s,0,Math.PI*2);c.stroke()});
+    drawText(c,'A',255*s,55*s,18);drawText(c,'B',505*s,55*s,18);drawText(c,'C',380*s,322*s,18);
+    if(!g.blank){const r=g.regions;[['a',285,120],['b',475,120],['c',380,275],['ab',380,105],['ac',327,205],['bc',433,205],['abc',380,170],['none',675,285]].forEach(([k,x,y])=>drawText(c,r[k],x*s,y*s,17));}
+  }else{
+    const mutual=g.type==='mutual',x1=mutual?285:315,x2=mutual?500:445,r=mutual?92:118,y=170;
+    c.fillStyle='#3b82f6';c.beginPath();c.arc(x1*s,y*s,r*s,0,Math.PI*2);c.fill();c.fillStyle='#10b981';c.beginPath();c.arc(x2*s,y*s,r*s,0,Math.PI*2);c.fill();c.restore();
+    c.strokeStyle='#64748b';c.lineWidth=2;[x1,x2].forEach(x=>{c.beginPath();c.arc(x*s,y*s,r*s,0,Math.PI*2);c.stroke()});drawText(c,'A',x1*s,55*s,18);drawText(c,'B',x2*s,55*s,18);
+    if(!g.blank){const rgn=g.regions;drawText(c,rgn.onlyA,(x1-50)*s,170*s,17);if(!mutual)drawText(c,rgn.both,380*s,170*s,17);drawText(c,rgn.onlyB,(x2+50)*s,170*s,17);drawText(c,rgn.none,675*s,285*s,17)}
+  }
+}
+const FILL_POS2={onlyA:[35,50],both:[50,50],onlyB:[65,50],none:[89,84]};
+const FILL_POS3={a:[37.5,35],b:[62.5,35],c:[50,81],ab:[50,31],ac:[43,60],bc:[57,60],abc:[50,50],none:[89,84]};
+function graphLegend(g){let t=`A = ${g.labels.A} · B = ${g.labels.B}`;if(g.labels.C)t+=` · C = ${g.labels.C}`;return t}
+
+let attempt=1,exam=[],graded=false,lastAnswers=[],lastScore=0,reviewing=false;
+const qs=document.getElementById('qs'),form=document.getElementById('form'),res=document.getElementById('res'),grade=document.getElementById('grade'),pdfBtn=document.getElementById('pdf'),reviewBtn=document.getElementById('review'),studyMode=document.getElementById('studyMode'),nameInput=document.getElementById('studentName'),att=document.getElementById('att'),report=document.getElementById('report');
+document.getElementById('bankTotal').textContent=ALL_BANK.length;
+
+function renderGraphBlock(s,x,i){
+  const wrap=document.createElement('div');wrap.className='graphWrap';
+  wrap.innerHTML=`<div class="graphTitle">Diagrama de Venn</div><div class="diagramStage"><canvas class="graphCanvas" aria-label="Diagrama de Venn de la pregunta ${i+1}"></canvas></div><div class="legend">${escapeHtml(graphLegend(x.graph))}</div>`;
+  s.appendChild(wrap);const stage=wrap.querySelector('.diagramStage'),canvas=wrap.querySelector('canvas');drawVenn(canvas,x.graph);
+  if(x.kind==='fill2'||x.kind==='fill3'){
+    const pos=x.kind==='fill2'?FILL_POS2:FILL_POS3;
+    x.answers.forEach(a=>{const inp=document.createElement('input');inp.type='text';inp.inputMode='decimal';inp.className='vennInput';inp.dataset.key=a.key;inp.placeholder='?';inp.setAttribute('aria-label',a.label);inp.style.left=pos[a.key][0]+'%';inp.style.top=pos[a.key][1]+'%';stage.appendChild(inp)});
+    const help=document.createElement('div');help.className='fillHelp';help.textContent='Escribe el número de casos correspondiente en cada región.';wrap.appendChild(help);
+  }
+}
+function renderQuestion(x,i){
+  const s=document.createElement('section');s.className='q';s.dataset.i=i;
+  s.innerHTML=`<div class="qh"><div class="n">${i+1}</div><div class="qmain"><div class="badges"><span class="badge">${escapeHtml(x.topic)}</span><span class="badge">${escapeHtml(x.tag)}</span></div><div class="qt">${escapeHtml(x.q)}</div>${x.context?`<div class="context">${escapeHtml(x.context)}</div>`:''}</div></div>`;
+  if(x.graph)renderGraphBlock(s,x,i);
+  if(x.kind==='input'){
+    const row=document.createElement('div');row.className='answerRow';row.innerHTML=`<input class="answerInput" name="q${i}" type="text" autocomplete="off" placeholder="Escribe tu respuesta"><span class="unitHint">${x.answer.kind==='integer'?'Escribe únicamente el resultado numérico.':'Puedes usar decimal, fracción o porcentaje.'}</span>`;s.appendChild(row);
+  }
+  const study=document.createElement('button');study.type='button';study.className='secondary studyCheck';study.textContent='Comprobar respuesta';study.addEventListener('click',()=>showQuestionFeedback(i,false));s.appendChild(study);
+  const mini=document.createElement('div');mini.className='miniResult';s.appendChild(mini);
+  const exp=document.createElement('div');exp.className='exp';exp.innerHTML=`<b>Explicación:</b> ${escapeHtml(x.exp)}`;s.appendChild(exp);
+  return s;
+}
+function build(){
+  graded=false;lastAnswers=[];reviewing=false;grade.disabled=false;pdfBtn.style.display='none';reviewBtn.style.display='none';reviewBtn.textContent='Repasar sólo errores';res.style.display='none';res.className='res';qs.innerHTML='';document.getElementById('app').classList.toggle('studyOn',studyMode.checked);
+  exam=buildExam();exam.forEach((x,i)=>qs.appendChild(renderQuestion(x,i)));window.scrollTo({top:0,behavior:'smooth'});
+}
+function getRawAnswer(x,sec){
+  if(x.kind==='input')return sec.querySelector('.answerInput').value;
+  const o={};sec.querySelectorAll('.vennInput').forEach(inp=>o[inp.dataset.key]=inp.value);return o;
+}
+function answerComplete(x,raw){if(x.kind==='input')return String(raw).trim()!=='';return x.answers.every(a=>String(raw[a.key]||'').trim()!=='')}
+function scoreQuestion(x,raw){
+  if(x.kind==='input')return {score:isCorrect(raw,x.answer)?1:0,parts:[isCorrect(raw,x.answer)]};
+  const parts=x.answers.map(a=>{const v=parseNumeric(raw[a.key]);return Number.isFinite(v)&&Math.abs(v-a.value)<1e-9});return {score:parts.filter(Boolean).length/parts.length,parts};
+}
+function clearQuestionFeedback(sec){sec.querySelectorAll('.answerInput,.vennInput').forEach(i=>i.classList.remove('ok','bad'));const m=sec.querySelector('.miniResult');m.style.display='none';m.className='miniResult';sec.querySelector('.exp').style.display='none'}
+function showQuestionFeedback(i,lock){
+  const x=exam[i],sec=qs.querySelector(`.q[data-i="${i}"]`),raw=getRawAnswer(x,sec);clearQuestionFeedback(sec);
+  const mini=sec.querySelector('.miniResult');if(!answerComplete(x,raw)){mini.textContent='Falta completar la respuesta.';mini.className='miniResult badText';mini.style.display='block';return null}
+  const result=scoreQuestion(x,raw);
+  if(x.kind==='input'){
+    const inp=sec.querySelector('.answerInput');inp.classList.add(result.score===1?'ok':'bad');if(lock)inp.disabled=true;
+    mini.innerHTML=result.score===1?'Correcta':`Incorrecta. Respuesta correcta: <b>${escapeHtml(displayAnswer(x.answer))}</b>`;
+  }else{
+    x.answers.forEach((a,j)=>{const inp=sec.querySelector(`.vennInput[data-key="${a.key}"]`);inp.classList.add(result.parts[j]?'ok':'bad');if(lock)inp.disabled=true;if(!result.parts[j])inp.title=`Correcto: ${a.value}`});
+    const got=result.parts.filter(Boolean).length;mini.innerHTML=result.score===1?'Todas las regiones son correctas.':`${got} de ${x.answers.length} regiones correctas. Valores correctos: ${x.answers.map(a=>`${a.label}=${a.value}`).join(', ')}.`;
+    const ss=document.createElement('div');ss.className='subScore';ss.textContent=`Crédito del reactivo: ${(result.score).toFixed(2)} / 1`;mini.appendChild(ss);
+  }
+  mini.className='miniResult '+(result.score===1?'goodText':'badText');mini.style.display='block';sec.querySelector('.exp').style.display='block';return result;
+}
+studyMode.addEventListener('change',()=>{if(graded){studyMode.checked=!studyMode.checked;return}document.getElementById('app').classList.toggle('studyOn',studyMode.checked);if(!studyMode.checked)exam.forEach((x,i)=>clearQuestionFeedback(qs.querySelector(`.q[data-i="${i}"]`)))});
+
+form.addEventListener('submit',e=>{
+  e.preventDefault();if(graded)return;const student=nameInput.value.trim();
+  if(!student){nameInput.focus();res.style.display='block';res.className='res mid';res.innerHTML='<h2>Falta el nombre</h2><div>Escribe el nombre del estudiante antes de calificar.</div>';return}
+  const raws=exam.map((x,i)=>getRawAnswer(x,qs.querySelector(`.q[data-i="${i}"]`)));const missing=raws.filter((r,i)=>!answerComplete(exam[i],r)).length;
+  if(missing){res.style.display='block';res.className='res mid';res.innerHTML=`<h2>Faltan respuestas</h2><div>Hay ${missing} reactivo${missing===1?'':'s'} incompleto${missing===1?'':'s'}.</div>`;res.scrollIntoView({behavior:'smooth',block:'center'});return}
+  graded=true;grade.disabled=true;lastAnswers=[];let total=0;const byTopic={};
+  exam.forEach((x,i)=>{const result=showQuestionFeedback(i,true),raw=raws[i];total+=result.score;lastAnswers.push({raw,score:result.score,parts:result.parts});if(!byTopic[x.topic])byTopic[x.topic]={earned:0,total:0};byTopic[x.topic].earned+=result.score;byTopic[x.topic].total+=1});
+  lastScore=total;const pct=Math.round(total/exam.length*100);let cls='low',msg='Conviene revisar las explicaciones y generar otro intento.';if(pct>=90){cls='good';msg='Dominio muy sólido. Genera otro intento para comprobar que el resultado se mantiene con contextos distintos.'}else if(pct>=70){cls='mid';msg='Buen avance. Usa “Repasar sólo errores” antes de intentar otra versión.'}
+  const topicHtml=Object.entries(byTopic).map(([k,v])=>`<div class="topicStat"><b>${escapeHtml(k)}</b><br>${v.earned.toFixed(2)} / ${v.total.toFixed(0)} puntos</div>`).join('');
+  res.style.display='block';res.className='res '+cls;res.innerHTML=`<h2>${total.toFixed(2)} / ${exam.length} - ${pct}%</h2><div>${msg}</div><div class="topicGrid">${topicHtml}</div><div class="pdfHint">Los ejercicios de completar diagramas pueden otorgar crédito parcial por región.</div>`;
+  pdfBtn.style.display='inline-block';reviewBtn.style.display=lastAnswers.some(a=>a.score<.999999)?'inline-block':'none';res.scrollIntoView({behavior:'smooth',block:'center'});
+});
+reviewBtn.addEventListener('click',()=>{if(!graded)return;reviewing=!reviewing;exam.forEach((x,i)=>{const sec=qs.querySelector(`.q[data-i="${i}"]`);sec.style.display=(!reviewing||lastAnswers[i].score<.999999)?'block':'none'});reviewBtn.textContent=reviewing?'Mostrar todas':'Repasar sólo errores';if(reviewing)window.scrollTo({top:qs.offsetTop-10,behavior:'smooth'})});
+
+function rawDisplay(x,raw){
+  if(x.kind==='input')return String(raw);
+  return x.answers.map(a=>`${a.label}: ${raw[a.key]}`).join(' · ');
+}
+function correctDisplay(x){if(x.kind==='input')return displayAnswer(x.answer);return x.answers.map(a=>`${a.label}: ${a.value}`).join(' · ')}
+function makeReport(){
+  const student=nameInput.value.trim(),date=new Date().toLocaleString('es-MX'),pct=Math.round(lastScore/exam.length*100);
+  let body=`<div class="reportHead"><h1>Reporte - Combinatoria, probabilidad y diagramas de Venn (v1.1)</h1><div class="reportMeta"><div><b>Estudiante:</b> ${escapeHtml(student)}</div><div><b>Fecha:</b> ${escapeHtml(date)}</div><div><b>Intento:</b> ${attempt}</div><div><b>Calificación:</b> ${lastScore.toFixed(2)}/${exam.length} (${pct}%)</div></div></div>`;
+  exam.forEach((x,i)=>{const a=lastAnswers[i],sec=qs.querySelector(`.q[data-i="${i}"]`);let img='';const canv=sec.querySelector('canvas');if(canv)img=`<img alt="Diagrama de la pregunta ${i+1}" src="${canv.toDataURL('image/png')}">`;body+=`<div class="reportQ"><h2>${i+1}. ${escapeHtml(x.q)}</h2>${x.context?`<p>${escapeHtml(x.context)}</p>`:''}${img}<p><b>Tema:</b> ${escapeHtml(x.topic)} — ${escapeHtml(x.tag)}</p><p><b>Respuesta del estudiante:</b> ${escapeHtml(rawDisplay(x,a.raw))}</p><p><b>Respuesta correcta:</b> ${escapeHtml(correctDisplay(x))}</p><p class="${a.score>.999999?'markOK':'markBad'}"><b>Puntaje:</b> ${a.score.toFixed(2)} / 1</p><p><b>Explicación:</b> ${escapeHtml(x.exp)}</p></div>`});report.innerHTML=body;
+}
+pdfBtn.addEventListener('click',()=>{if(!graded)return;makeReport();const old=document.title,safe=nameInput.value.trim().replace(/[^\p{L}\p{N}]+/gu,'_').replace(/^_+|_+$/g,'').slice(0,60)||'estudiante';document.title=`Probabilidad_${safe}_${lastScore.toFixed(2)}de${exam.length}`;setTimeout(()=>{window.print();setTimeout(()=>{document.title=old},300)},80)});
+function newExam(){if(!graded&&qs.querySelector('input:not([type=checkbox])')&&[...qs.querySelectorAll('.answerInput,.vennInput')].some(i=>i.value.trim())&&!confirm('Se perderán las respuestas del intento actual. ¿Generar otro examen?'))return;attempt++;att.textContent=attempt;build()}
+document.getElementById('new').addEventListener('click',newExam);document.getElementById('newTop').addEventListener('click',newExam);
+window.addEventListener('resize',()=>{exam.forEach((x,i)=>{if(x.graph){const c=qs.querySelector(`.q[data-i="${i}"] canvas`);if(c)drawVenn(c,x.graph)}})});
+build();
+</script>
+</body>
+</html>
