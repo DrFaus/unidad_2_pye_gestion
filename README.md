@@ -166,11 +166,8 @@ Una idea importante es que, al condicionar por $B$, el nuevo espacio de referenc
 
 Por ejemplo, si 40 clientes utilizan una aplicación móvil y 18 de ellos también participan en el programa de lealtad:
 
-$$
-P(\text{Lealtad}\mid\text{Aplicación})
-=
-\frac{18}{40}
-=
+$$P(\text{Lealtad}\mid\text{Aplicación})=
+\frac{18}{40}=
 0.45
 $$
 
